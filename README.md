@@ -17,6 +17,7 @@ It follows best practices such as modular code structure, remote state managemen
 * Terraform
 * Microsoft Azure
 * GitHub Actions
+* ADO
 * Azure CLI
 
 ---
