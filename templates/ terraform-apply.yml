@@ -21,6 +21,7 @@ jobs:
         backendAzureRmContainerName: ${{ parameters.tf_container }}
         backendAzureRmKey: ${{ parameters.tfstateKey }}
 
+
     - task: TerraformTask@5
       displayName: Apply
       inputs:
