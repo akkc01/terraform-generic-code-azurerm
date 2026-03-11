@@ -500,7 +500,6 @@ log_analytics_workspaces = {
   }
 }
 
-
 container_apps = {
   app1 = {
     rg_key             = "rg1"

@@ -31,37 +31,6 @@ module "pips" {
   rg_names   = module.rg.names
 }
 
-# module "nics1" {
-#   depends_on = [module.rg, module.vnet-subnet, module.pips]
-#   source     = "../../modules/azurerm_networking/azurerm_network_interface"
-#   nics = {
-#     for nic_key, nic_val in var.nics : nic_key => merge(
-#       nic_val,
-#       {
-#         ip_configuration = [
-#           for ip_cfg in nic_val.ip_configuration : merge(
-#             ip_cfg,
-#             {
-#               subnet_id            = module.vnet-subnet.subnet_ids[ip_cfg["vnet_key"]][ip_cfg["subnet_key"]]
-#               public_ip_address_id = try(module.pips.public_ip_ids[ip_cfg["pip_key"]], null)
-#             }
-#           )
-#         ]
-#       }
-#     )
-#   }
-#   rg_names = module.rg.names
-# }
-
-# module "nics" {
-#   depends_on = [module.rg, module.vnet, module.pips]
-#   source     = "../../modules/azurerm_networking/azurerm_network_interface_v1.1"
-#   nics = var.nics
-#   subnet_ids = module.vnet.subnet_ids
-#   rg_names = module.rg.names
-#   pip_ids = module.pips.public_ip_ids
-# }
-
 module "nics_with_data" {
   depends_on     = [module.rg, module.pips, module.subnet, module.vnet]
   source         = "../../modules/azurerm_networking/azurerm_network_interface_v2"
@@ -97,22 +66,6 @@ module "kvs" {
   key_vault_secrets = var.key_vault_secrets
   rg_names          = module.rg.names
 }
-
-# module "lvm" {
-#   depends_on = [module.rg, module.nics, module.pips, module.nsg]
-#   source     = "../../modules/azurerm_virtual_machine/azurerm_linux_virtual_machine_v1"
-#   virtual_machines = {
-#     for vm_key, vm_val in var.virtual_machines : vm_key => merge(
-#       vm_val,
-#       {
-#         network_interface_ids = [
-#           module.nics.nic_ids[vm_val.nic_key]
-#         ]
-#       }
-#     )
-#   }
-#   rg_names = module.rg.names
-# }
 
 module "lvm" {
   depends_on = [module.rg, module.nics_with_data, module.pips, module.nsg, module.kv, module.kvs]
